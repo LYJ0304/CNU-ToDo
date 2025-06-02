@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>사이버캠퍼스 알리미 시작하기</title>
+  <!-- iOS PWA 지원 메타 태그 -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="apple-touch-icon" href="icons/icon-152.png">
+  <link rel="manifest" href="manifest.json">
+  <!-- Google Material Icons 및 Material Symbols Outlined -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+  <style>
+    /* 다크모드 색상 변수 */
+    :root {
+      --background-color: #f0f2f5;
+      --card-background: #fff;
+      --text-color: #333;
+      --secondary-text: #666;
+      --border-color: #ddd;
+      --primary-color: #004099;
+      --accent-color: #ff3333;
+      --shadow-color: rgba(0, 0, 0, 0.1);
+      --button-hover-bg: #003080;
+    }
+
+    .dark-mode {
+      --background-color: #121212;
+      --card-background: #1e1e1e;
+      --text-color: #f0f0f0;
+      --secondary-text: #bbb;
+      --border-color: #444;
+      --primary-color: #3a6bc5;
+      --accent-color: #ff6b6b;
+      --shadow-color: rgba(0, 0, 0, 0.4);
+      --button-hover-bg: #1f56c5;
+    }
+
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background-color: var(--background-color);
+      margin: 0;
+      padding: 20px;
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+
+    .welcome-container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .welcome-logo {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .welcome-logo img {
+      width: 120px;
+      height: 120px;
+      border-radius: 20px;
+      box-shadow: 0 4px 12px var(--shadow-color);
+    }
+
+    .welcome-title {
+      font-size: 24px;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background-color: var(--card-background);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 12px var(--shadow-color);
+    }
+
+    .card-title {
+      display: flex;
+      align-items: center;
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 15px;
+      color: var(--primary-color);
+    }
+
+    .card-title .material-icons,
+    .card-title .material-symbols-outlined {
+      margin-right: 8px;
+      font-size: 24px;
+    }
+
+    .card-content {
+      margin-bottom: 15px;
+    }
+
+    .card-content p {
+      margin: 8px 0;
+    }
+
+    .card-content ul {
+      padding-left: 20px;
+    }
+
+    .card-content li {
+      margin-bottom: 8px;
+    }
+
+    .highlight {
+      background-color: rgba(255, 193, 7, 0.2);
+      padding: 2px 4px;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+
+    .browser-icons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin: 15px 0;
+    }
+
+    .browser-icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .browser-icon-circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 8px;
+      background-color: #fff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .browser-name {
+      font-size: 12px;
+    }
+
+    /* 브라우저 아이콘 스타일 */
+    .chrome-icon {
+      color: #4285f4;
+      font-size: 32px;
+    }
+
+    .safari-icon {
+      color: #1d9bf0;
+      font-size: 32px;
+    }
+
+    .edge-icon {
+      color: #0078d7;
+      font-size: 32px;
+    }
+
+    .chrome-store {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      background-color: #f5f5f5;
+      border-radius: 8px;
+      margin: 15px 0;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+      text-decoration: none;
+      color: var(--text-color);
+    }
+
+    .chrome-store-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      background-color: #4285f4;
+      border-radius: 50%;
+      margin-right: 12px;
+      flex-shrink: 0;
+    }
+
+    .chrome-store-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chrome-store-title {
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .chrome-store-subtitle {
+      font-size: 12px;
+      color: var(--secondary-text);
+    }
+
+    .action-button {
+      display: block;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 12px 24px;
+      font-size: 16px;
+      cursor: pointer;
+      text-align: center;
+      margin: 20px auto;
+      width: 200px;
+      text-decoration: none;
+      transition: background-color 0.2s;
+    }
+
+    .action-button:hover {
+      background-color: var(--button-hover-bg);
+    }
+
+    .install-step {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .step-number {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 24px;
+      height: 24px;
+      background-color: var(--primary-color);
+      color: white;
+      border-radius: 50%;
+      margin-right: 10px;
+      flex-shrink: 0;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .step-content {
+      flex: 1;
+    }
+
+    .step-content p {
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    .step-content p + p {
+      margin-top: 8px;
+    }
+
+    .dark-mode .chrome-store {
+      background-color: #2a2a2a;
+    }
+
+    /* URL 복사 필드 스타일 */
+    .url-copy-container {
+      display: flex;
+      align-items: center;
+      margin: 15px 0;
+      background-color: var(--background-color);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .url-field {
+      flex: 1;
+      padding: 10px 12px;
+      font-size: 14px;
+      border: none;
+      background-color: transparent;
+      color: var(--text-color);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .copy-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .copy-button:hover {
+      background-color: var(--button-hover-bg);
+    }
+    
+    /* 복사 완료 알림 */
+    .copy-toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-size: 14px;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+    
+    .copy-toast.show {
+      opacity: 1;
+    }
+
+    /* 약관 동의 텍스트 스타일 */
+    .terms-consent {
+      text-align: center;
+      margin: 5px auto 20px;
+      font-size: 13px;
+      color: var(--secondary-text);
+      max-width: 400px;
+    }
+    
+    .terms-link {
+      color: var(--primary-color);
+      cursor: pointer;
+      text-decoration: underline;
+      font-weight: 500;
+    }
+    
+    /* 모달 스타일 */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+    
+    .modal-content {
+      background-color: var(--card-background);
+      margin: 10% auto;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px var(--shadow-color);
+      max-width: 700px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 10px;
+      margin-bottom: 15px;
+    }
+    
+    .modal-header h2 {
+      margin: 0;
+      font-size: 20px;
+      color: var(--primary-color);
+    }
+    
+    .close {
+      color: var(--secondary-text);
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    
+    .close:hover {
+      color: var(--text-color);
+    }
+    
+    .modal-section {
+      margin-bottom: 20px;
+    }
+    
+    .modal-section h3 {
+      font-size: 18px;
+      margin-top: 20px;
+      margin-bottom: 10px;
+      color: var(--primary-color);
+    }
+    
+    .modal-footer {
+      margin-top: 20px;
+      text-align: center;
+    }
+    
+    .modal-button {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    
+    .modal-button:hover {
+      background-color: var(--button-hover-bg);
+    }
+
+    /* 설치 가이드 오버레이 */
+    .install-guide-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      z-index: 2000;
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      pointer-events: auto;
+      overflow: visible; /* 오버플로우 허용 */
+    }
+
+    .install-guide-message {
+      background-color: var(--card-background);
+      padding: 20px;
+      margin: 0 20px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 4px 12px var(--shadow-color);
+      max-width: 320px;
+      position: relative;
+      z-index: 2005; /* 화살표보다 위에 표시 */
+    }
+
+    .install-guide-message h3 {
+      color: var(--primary-color);
+      margin-top: 0;
+    }
+
+    .icon-inline {
+      display: inline-block;
+      vertical-align: middle;
+      margin: 0 3px;
+      font-size: 18px;
+    }
+
+    /* 화살표 컨테이너 - 메시지 박스 안에 위치 */
+    .arrow-container {
+      position: relative;
+      width: 100%;
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .install-guide-arrow {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      position: relative;
+      animation: pulse-simple 1.5s infinite;
+    }
+
+    /* Safari 전용 긴 화살표 스타일 */
+    .safari-arrow-container {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 4px;
+      background-color: #FF3333;
+      z-index: 2002;
+      animation: glow 1.5s infinite;
+      pointer-events: none; /* 화살표 위에서 클릭이 가능하도록 수정 */
+    }
+
+    .safari-arrow-head {
+      position: absolute;
+      bottom: -18px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 15px solid transparent;
+      border-right: 15px solid transparent;
+      border-top: 20px solid #FF3333;
+      filter: drop-shadow(0px 0px 8px rgba(255, 51, 51, 0.8));
+      pointer-events: none; /* 화살표 머리 위에서 클릭이 가능하도록 수정 */
+    }
+
+    /* iOS Chrome 곡선 화살표 */
+    .chrome-ios-arrow-container {
+      position: absolute;
+      z-index: 2002;
+      pointer-events: none;
+    }
+
+    .chrome-ios-arrow {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      fill: none;
+      stroke: #FF3333;
+      stroke-width: 4;
+      filter: drop-shadow(0px 0px 8px rgba(255, 51, 51, 0.8));
+      animation: glow 1.5s infinite;
+    }
+
+    .chrome-ios-arrow-head {
+      position: absolute;
+      width: 0;
+      height: 0;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-bottom: 16px solid #FF3333;
+      transform: rotate(45deg);
+      filter: drop-shadow(0px 0px 8px rgba(255, 51, 51, 0.8));
+    }
+
+    @keyframes glow {
+      0% {
+        box-shadow: 0 0 5px #FF3333;
+        opacity: 0.6;
+      }
+      50% {
+        box-shadow: 0 0 15px #FF3333;
+        opacity: 1;
+      }
+      100% {
+        box-shadow: 0 0 5px #FF3333;
+        opacity: 0.6;
+      }
+    }
+
+    /* 방향 표시 */
+    .arrow-up svg {
+      transform: rotate(270deg);
+    }
+
+    .arrow-right svg {
+      transform: rotate(0deg);
+    }
+
+    .arrow-down svg {
+      transform: rotate(90deg);
+    }
+
+    .arrow-left svg {
+      transform: rotate(180deg);
+    }
+
+    /* 브라우저 위치 설명 */
+    .browser-position {
+      margin-top: 10px;
+      color: #FF3333;
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 15px; /* 화살표를 위한 여백 */
+    }
+
+    /* 닫기 버튼 */
+    .overlay-close {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      color: white;
+      background-color: rgba(0,0,0,0.5);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      cursor: pointer;
+      z-index: 2001;
+    }
+
+    @keyframes pulse-simple {
+      0% {
+        opacity: 0.6;
+        transform: scale(0.9);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.1);
+      }
+      100% {
+        opacity: 0.6;
+        transform: scale(0.9);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .welcome-container {
+        padding: 10px;
+      }
+      
+      .card {
+        padding: 15px;
+      }
+      
+      .url-copy-container {
+        flex-direction: column;
+      }
+      
+      .url-field {
+        width: 100%;
+        padding: 12px;
+        text-align: center;
+        border-bottom: 1px solid var(--border-color);
+      }
+      
+      .copy-button {
+        width: 100%;
+        padding: 12px;
+      }
+    }
+  </style>
+</head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y0BXKXB9RF"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-Y0BXKXB9RF');
+</script>
+<body>
+  <div class="welcome-container">
+    <div class="welcome-logo">
+      <img src="icons/icon-192.png" alt="사이버캠퍼스 알리미 로고">
+    </div>
+    
+    <h1 class="welcome-title">사이버캠퍼스 알리미에 오신 것을 환영합니다!</h1>
+    
+    <div class="card">
+      <div class="card-title">
+        <span class="material-symbols-outlined">info</span>
+        시작하기 전에 알아두세요
+      </div>
+      <div class="card-content">
+        <p>사이버캠퍼스 알리미는 충남대학교 사이버캠퍼스의 과제, 콘텐츠 및 기타 일정을 쉽게 확인할 수 있는 웹앱입니다.</p>
+        <p>서비스를 올바르게 사용하기 위해 다음 안내를 확인해주세요.</p>
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="card-title">
+        <span class="material-icons">open_in_browser</span>
+        외부 브라우저로 접속하세요
+      </div>
+      <div class="card-content">
+        <p>서비스를 이용하기 위해서는 <span class="highlight">외부 브라우저</span>를 사용해야 합니다 (예: Safari, Chrome).</p>
+        
+        <p>다른 앱(예: 에브리타임, 카카오톡) 내부에서 접속하신 경우, 아래와 같이 공유 또는 메뉴 버튼을 통해 <strong>'Safari에서 열기'</strong> 또는 <strong>'다른 브라우저로 열기'</strong>를 선택해주세요.</p>
+        
+        <div style="text-align: center; margin: 15px 0;">
+          <img src="/img/ios-everytime.jpeg" alt="외부 브라우저로 여는 방법 예시" style="max-width: 80%; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15);">
+        </div>
+
+        <div class="browser-icons">
+          <div class="browser-icon">
+            <div class="browser-icon-circle">
+              <span class="material-symbols-outlined chrome-icon">chrome_reader_mode</span>
+            </div>
+            <span class="browser-name">Chrome</span>
+          </div>
+          <div class="browser-icon">
+            <div class="browser-icon-circle">
+              <span class="material-symbols-outlined safari-icon">travel_explore</span>
+            </div>
+            <span class="browser-name">Safari</span>
+          </div>
+          <div class="browser-icon">
+            <div class="browser-icon-circle">
+              <span class="material-symbols-outlined edge-icon">public</span>
+            </div>
+            <span class="browser-name">Edge</span>
+          </div>
+        </div>
+        
+        <p>에브리타임이나 카카오톡같이 앱 내장 브라우저에서는 앱 설치가 제한됩니다.</p>
+        
+        <p>아래 URL을 복사하여 외부 브라우저에서 열어주세요:</p>
+        
+        <div class="url-copy-container">
+          <input type="text" id="pageUrl" class="url-field" readonly>
+          <button id="copyButton" class="copy-button">
+            <span class="material-icons">content_copy</span>
+            <span>복사</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="card-title">
+        <span class="material-icons">extension</span>
+        크롬 확장 프로그램 필수 설치
+      </div>
+      <div class="card-content">
+        <p><span class="highlight">반드시 PC 크롬 환경</span>에서 다음 확장 프로그램을 설치해야 서비스 이용이 가능합니다:</p>
+        
+        <a href="https://chromewebstore.google.com/detail/daigfigieemjaigcbgoolahfmiemcegn" target="_blank" class="chrome-store">
+          <div class="chrome-store-icon">
+            <span class="material-icons" style="color: white;">extension</span>
+          </div>
+          <div class="chrome-store-text">
+            <span class="chrome-store-title">AutoDCS Extension</span>
+            <span class="chrome-store-subtitle">Chrome 웹 스토어에서 설치하기</span>
+          </div>
+        </a>
+        
+        <p>이 확장 프로그램은 사이버캠퍼스에서 할 일 목록을 수집하여 푸시 알림 및 이 웹앱에 표시합니다.</p>
+        
+        <p>아래 URL을 복사하여 PC 크롬에서 접속하면 확장 프로그램을 설치할 수 있습니다:</p>
+        
+        <div class="url-copy-container">
+          <input type="text" id="extensionUrl" class="url-field" value="https://chromewebstore.google.com/detail/daigfigieemjaigcbgoolahfmiemcegn" readonly>
+          <button id="copyExtensionButton" class="copy-button">
+            <span class="material-icons">content_copy</span>
+            <span>복사</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card">
+      <div class="card-title">
+        <span class="material-icons">get_app</span>
+        PWA 웹앱 설치 방법
+      </div>
+      <div class="card-content">
+        <div class="install-step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <p>브라우저 주소창 오른쪽의 설치 아이콘을 클릭하세요.</p>
+          </div>
+        </div>
+        
+        <div class="install-step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <p><strong>iOS (Safari):</strong> 공유 버튼 → "홈 화면에 추가" 선택</p>
+            <!-- iOS 사용자를 위한 설치 가이드 이미지 -->
+            <div id="ios-install-guide" style="display: none; margin-top: 10px; text-align: center;">
+              <img src="img/ios-pwa-guide.png" alt="iOS 설치 가이드" style="max-width: 100%; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.2);">
+            </div>
+            <p><strong>Android (Chrome):</strong> 설치 팝업 또는 메뉴에서 "앱 설치" 선택</p>
+          </div>
+        </div>
+        
+        <div class="install-step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <p>설치 후에는 홈 화면의 앱 아이콘을 통해 접속할 수 있습니다.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <a href="index.html" class="action-button">시작하기</a>
+    
+    <div class="terms-consent">
+      "시작하기" 버튼을 클릭하면 <span class="terms-link" id="openTerms">서비스 이용약관</span>에 동의하는 것으로 간주됩니다.
+    </div>
+    
+    <div id="copyToast" class="copy-toast">URL이 복사되었습니다!</div>
+  </div>
+  
+  <!-- 이용약관 모달 -->
+  <div id="termsModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>사이버캠퍼스 알리미 이용약관</h2>
+        <span class="close">&times;</span>
+      </div>
+      
+      <div class="modal-section">
+        <h3>1. 서비스 소개 및 이용 약관 동의</h3>
+        <p>사이버캠퍼스 알리미(이하 '서비스')는 충남대학교 사이버캠퍼스의 과제, 콘텐츠 및 일정 정보를 제공하는 웹 애플리케이션입니다. 본 서비스를 이용하시려면 다음 약관에 동의하셔야 합니다.</p>
+      </div>
+      
+      <div class="modal-section">
+        <h3>2. 개인정보 수집 및 이용 동의</h3>
+        <p>본 서비스는 다음과 같은 개인정보를 수집하고 이용합니다:</p>
+        <ul>
+          <li>학번 정보 (SHA-256 해시 처리되어 서버에 저장)</li>
+          <li>사이버캠퍼스 일정 정보</li>
+          <li>알림 설정 정보 (시간, 구독 상태 등)</li>
+          <li>사용 기록 (테마 설정, 알림 시간 등)</li>
+        </ul>
+        <p>수집된 개인정보는 서비스 제공을 위한 용도로만 이용되며, 이용자의 동의 없이 제3자에게 제공되지 않습니다.</p>
+        <p>수집된 개인정보는 서비스 제공 목적 달성 후 또는 이용자의 삭제 요청 시 지체 없이 파기하는 것을 원칙으로 합니다. 단, 이용자의 별도 요청이 없거나 다른 법령에 특별한 규정이 없는 경우, 서비스의 원활한 제공 및 통계 분석을 위해 <strong>최대 1년간 보관 후 자동 파기</strong>될 수 있습니다.</p>
+      </div>
+      
+      <div class="modal-section">
+        <h3>3. 확장 프로그램 및 제3자 제공 동의</h3>
+        <p>사이버캠퍼스 알리미 서비스는 Chrome 브라우저 확장 프로그램(AutoDCS Extension)을 통해 데이터를 수집합니다. 확장 프로그램은 사용자의 사이버캠퍼스 정보에 접근하여 일정 데이터를 수집하고, 이를 서버로 전송합니다.</p>
+      </div>
+      
+      <div class="modal-section">
+        <h3>4. 푸시 알림 서비스 이용 동의</h3>
+        <p>사용자가 푸시 알림 기능을 활성화할 경우, 브라우저 알림 권한이 요청되며 설정된 시간에 맞춰 알림이 발송됩니다. 알림 서비스는 언제든지 설정 메뉴에서 해제할 수 있습니다.</p>
+      </div>
+      
+      <div class="modal-section">
+        <h3>5. 사용 데이터 수집 동의</h3>
+        <p>서비스 개선을 위해 사용자의 사용 패턴 및 행동에 대한 데이터를 익명으로 수집할 수 있습니다. 이 데이터는 통계적 분석 및 서비스 개선 목적으로만 활용됩니다.</p>
+      </div>
+      
+      <div class="modal-section">
+        <h3>6. 약관 변경</h3>
+        <p>본 서비스는 필요 시 약관을 변경할 수 있으며, 변경 사항이 있을 경우 서비스 내 공지 또는 알림을 통해 사용자에게 안내합니다.</p>
+      </div>
+      
+      <div class="modal-footer">
+        <button id="closeTerms" class="modal-button">확인</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 설치 완료 안내 모달 -->
+  <div id="installCompleteModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>앱 설치 완료!</h2>
+        <span class="close-install">&times;</span>
+      </div>
+      
+      <div class="modal-section">
+        <div style="text-align: center; margin: 20px 0;">
+          <span class="material-icons" style="font-size: 48px; color: var(--primary-color);">check_circle</span>
+        </div>
+        <p style="text-align: center; font-size: 18px;">사이버캠퍼스 알리미가 성공적으로 설치되었습니다!</p>
+        <p style="text-align: center;">이제 <strong>홈 화면에서 설치된 앱 아이콘</strong>을 클릭하여 실행해주세요.</p>
+        <p style="text-align: center; margin-top: 15px; color: var(--secondary-text);">브라우저를 닫고 홈 화면으로 이동하세요.</p>
+      </div>
+      
+      <div class="modal-footer">
+        <!-- 브라우저에서 계속하기 버튼 삭제 -->
+      </div>
+    </div>
+  </div>
+  
+  <!-- 설치 가이드 오버레이 - Safari -->
+  <div id="safariInstallGuide" class="install-guide-overlay">
+    <div class="overlay-close">&times;</div>
+    <div class="install-guide-message">
+      <h3>Safari에 앱 설치하기</h3>
+      <p>하단의 <strong>공유 버튼</strong> <span class="icon-inline"><span class="material-icons" style="font-size: 20px;">ios_share</span></span>을 탭하고<br>
+      <strong>"홈 화면에 추가"</strong> 옵션을 선택하세요</p>
+      
+      <div class="browser-position">화면 하단에 있습니다</div>
+    </div>
+    <div id="safariArrow" class="safari-arrow-container">
+      <div class="safari-arrow-head"></div>
+    </div>
+  </div>
+
+  <!-- 설치 가이드 오버레이 - iOS Chrome -->
+  <div id="iosChromeInstallGuide" class="install-guide-overlay">
+    <div class="overlay-close">&times;</div>
+    <div class="install-guide-message">
+      <h3>Chrome(iOS)에 앱 설치하기</h3>
+      <p>상단 오른쪽의 <strong>공유 버튼</strong> <span class="icon-inline"><span class="material-icons" style="font-size: 20px;">ios_share</span></span>을 탭하고<br>
+      <strong>"홈 화면에 추가"</strong> 옵션을 선택하세요</p>
+      
+      <div class="browser-position">화면 상단 오른쪽에 있습니다</div>
+    </div>
+    <div id="chromeIosArrow" class="chrome-ios-arrow-container">
+      <svg class="chrome-ios-arrow">
+        <path id="chromeIosArrowPath"></path>
+      </svg>
+      <div id="chromeIosArrowHead" class="chrome-ios-arrow-head"></div>
+    </div>
+  </div>
+
+  <!-- 설치 가이드 오버레이 - Android Chrome -->
+  <div id="androidChromeInstallGuide" class="install-guide-overlay">
+    <div class="overlay-close">&times;</div>
+    <div class="install-guide-message">
+      <h3>Chrome(Android)에 앱 설치하기</h3>
+      <p>상단 오른쪽의 <strong>메뉴 버튼</strong> <span class="icon-inline"><span class="material-icons" style="font-size: 20px;">more_vert</span></span>을 탭하고<br>
+      <strong>"홈 화면에 추가"</strong> 옵션을 선택하세요</p>
+      
+      <div class="arrow-container">
+        <div class="install-guide-arrow arrow-up">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M5,3l3.057-3L20,12L8.057,24L5,21l9-9L5,3z"/>
+          </svg>
+        </div>
+        <div class="browser-position">화면 상단 오른쪽에 있습니다</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 다크모드 설정 확인
+    function initTheme() {
+      const savedTheme = localStorage.getItem('theme') || 'system';
+      if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+      } else if (savedTheme === 'system') {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.body.classList.toggle('dark-mode', prefersDark);
+      }
+    }
+
+    // PWA 설치 여부 감지 함수
+    function isPwaInstalled() {
+      // standalone 모드 (Android, Windows)
+      const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+      
+      // fullscreen 모드
+      const isFullscreen = window.matchMedia('(display-mode: fullscreen)').matches;
+      
+      // iOS의 경우 navigator.standalone 사용
+      const isIOSInstalled = navigator.standalone;
+      
+      return isStandalone || isFullscreen || isIOSInstalled;
+    }
+
+    // 브라우저 타입 감지 함수
+    function detectBrowser() {
+      const userAgent = navigator.userAgent.toLowerCase();
+      
+      // iOS Safari 감지
+      if (/iphone|ipod|ipad/.test(userAgent) && /safari/.test(userAgent) && !(/crios/.test(userAgent)) && !(/fxios/.test(userAgent))) {
+        return 'safari';
+      }
+      
+      // iOS Chrome 감지
+      if (/iphone|ipod|ipad/.test(userAgent) && /crios/.test(userAgent)) {
+        return 'chrome-ios';
+      }
+      
+      // Android Chrome 감지
+      if (/android/.test(userAgent) && /chrome/.test(userAgent)) {
+        return 'chrome-android';
+      }
+      
+      // 기타 브라우저
+      return 'other';
+    }
+
+    // PC 환경 감지 함수
+    function isPcEnvironment() {
+      const userAgent = navigator.userAgent.toLowerCase();
+      // 모바일 기기 패턴 확인
+      const isMobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
+      // 화면 크기도 참고 (일반적으로 PC는 768px보다 큼)
+      const isLargeScreen = window.innerWidth >= 768;
+      
+      return !isMobile || isLargeScreen;
+    }
+
+    // 설치 가이드 표시 함수
+    function showInstallGuide() {
+      const browserType = detectBrowser();
+      
+      if (browserType === 'safari') {
+        const overlay = document.getElementById('safariInstallGuide');
+        overlay.style.display = 'flex';
+        
+        // Safari 화살표 높이 동적 계산
+        const messageBox = overlay.querySelector('.install-guide-message');
+        const arrow = document.getElementById('safariArrow');
+        
+        // 화살표 위치와 길이 계산
+        setTimeout(() => {
+          const messageRect = messageBox.getBoundingClientRect();
+          const windowHeight = window.innerHeight;
+          const startY = messageRect.bottom + 10; // 메시지 박스 아래로 10px 여백 추가
+          const endY = windowHeight - 80; // 하단에서 약간 위
+          
+          // 화살표 위치 및 크기 설정
+          arrow.style.top = `${startY}px`;
+          arrow.style.height = `${endY - startY}px`;
+          arrow.style.width = '4px'; // 명시적 너비 설정
+          
+          // 화살표를 최상위로 보내기
+          arrow.style.zIndex = '2005';
+        }, 50);
+        
+      } else if (browserType === 'chrome-ios') {
+        const overlay = document.getElementById('iosChromeInstallGuide');
+        overlay.style.display = 'flex';
+        
+        // iOS Chrome 곡선 화살표 계산 및 표시
+        setTimeout(() => {
+          const messageBox = overlay.querySelector('.install-guide-message');
+          const arrowContainer = document.getElementById('chromeIosArrow');
+          const arrowPath = document.getElementById('chromeIosArrowPath');
+          const arrowHead = document.getElementById('chromeIosArrowHead');
+          
+          // 모달 위치와 윈도우 크기
+          const messageRect = messageBox.getBoundingClientRect();
+          const windowWidth = window.innerWidth;
+          const windowHeight = window.innerHeight;
+          
+          // 시작점 (모달 오른쪽 중앙)
+          const startX = messageRect.right;
+          const startY = messageRect.top + messageRect.height / 2;
+          
+          // 끝점 (화면 오른쪽 상단 공유 버튼 위치)
+          const endX = windowWidth - 40; // 오른쪽에서 40px
+          const endY = 60; // 상단에서 60px
+          
+          // 곡선의 제어점 (곡선 모양을 결정)
+          const controlX1 = startX + 80;
+          const controlY1 = startY - 30;
+          const controlX2 = endX - 40;
+          const controlY2 = endY + 100;
+          
+          // 화살표 컨테이너 크기 및 위치 설정
+          arrowContainer.style.top = '0';
+          arrowContainer.style.left = '0';
+          arrowContainer.style.width = `${windowWidth}px`;
+          arrowContainer.style.height = `${windowHeight}px`;
+          
+          // 곡선 경로 생성
+          const pathD = `M ${startX} ${startY} C ${controlX1} ${controlY1}, ${controlX2} ${controlY2}, ${endX} ${endY}`;
+          arrowPath.setAttribute('d', pathD);
+          
+          // 화살표 머리 위치 및 각도 설정
+          arrowHead.style.left = `${endX - 5}px`;
+          arrowHead.style.top = `${endY - 5}px`;
+        }, 50);
+        
+      } else if (browserType === 'chrome-android') {
+        document.getElementById('androidChromeInstallGuide').style.display = 'flex';
+      } else {
+        // 알 수 없는 브라우저는 기본 PWA 설치 프롬프트 사용
+        if (deferredPrompt) {
+          deferredPrompt.prompt();
+        }
+      }
+    }
+
+    // PWA 설치 프롬프트 저장 변수
+    let deferredPrompt;
+
+    document.addEventListener('DOMContentLoaded', function() {
+      initTheme();
+      
+      // iOS 디바이스 감지 및 설치 가이드 이미지 표시
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      if (isIOS) {
+        const iosGuide = document.getElementById('ios-install-guide');
+        if (iosGuide) {
+          iosGuide.style.display = 'block';
+        }
+      }
+      
+      // URL 필드에 현재 URL 설정
+      const urlField = document.getElementById('pageUrl');
+      const extensionUrlField = document.getElementById('extensionUrl');
+      
+      // 현재 URL 구성 - 웹앱의 기본 URL
+      const baseUrl = window.location.origin;
+      const pathParts = window.location.pathname.split('/');
+      const lastSegment = pathParts[pathParts.length - 1];
+      
+      // welcome.html을 제외한 기본 URL 생성
+      let currentUrl = baseUrl;
+      if (lastSegment === 'welcome.html') {
+        // 경로의 마지막 부분이 welcome.html이면 제거
+        pathParts.pop();
+        currentUrl = baseUrl + pathParts.join('/');
+        // URL 끝에 슬래시 확인
+        if (!currentUrl.endsWith('/')) {
+          currentUrl += '/';
+        }
+      } else {
+        // 경로 그대로 사용
+        currentUrl = baseUrl + window.location.pathname;
+      }
+      
+      urlField.value = currentUrl;
+      
+      // URL 복사 함수 정의
+      async function copyTextToClipboard(text, toastMessage) {
+        try {
+          // 현대적인 Clipboard API 사용
+          if (navigator.clipboard) {
+            await navigator.clipboard.writeText(text);
+          } else {
+            // 폴백: 이전 방식 사용
+            const tempInput = document.createElement('input');
+            tempInput.style.position = 'absolute';
+            tempInput.style.left = '-9999px';
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+          }
+          
+          // 복사 완료 토스트 표시
+          const copyToast = document.getElementById('copyToast');
+          copyToast.textContent = toastMessage || 'URL이 복사되었습니다!';
+          copyToast.classList.add('show');
+          setTimeout(function() {
+            copyToast.classList.remove('show');
+          }, 2000);
+          
+          return true;
+        } catch (err) {
+          console.error('복사 실패:', err);
+          alert('URL을 복사하지 못했습니다. 직접 선택 후 복사해주세요.');
+          return false;
+        }
+      }
+      
+      // 웹앱 URL 복사 버튼
+      const copyButton = document.getElementById('copyButton');
+      copyButton.addEventListener('click', function() {
+        urlField.select();
+        copyTextToClipboard(urlField.value);
+      });
+      
+      // 확장프로그램 URL 복사 버튼
+      const copyExtensionButton = document.getElementById('copyExtensionButton');
+      copyExtensionButton.addEventListener('click', function() {
+        extensionUrlField.select();
+        copyTextToClipboard(extensionUrlField.value, '확장프로그램 URL이 복사되었습니다!');
+      });
+      
+      // 이용약관 모달 관련 기능
+      const modal = document.getElementById('termsModal');
+      const openTermsBtn = document.getElementById('openTerms');
+      const closeBtn = document.querySelector('.close');
+      const closeTermsBtn = document.getElementById('closeTerms');
+      
+      // 모달 열기
+      openTermsBtn.addEventListener('click', function() {
+        modal.style.display = 'block';
+      });
+      
+      // 모달 닫기 (X 버튼)
+      closeBtn.addEventListener('click', function() {
+        modal.style.display = 'none';
+      });
+      
+      // 모달 닫기 (확인 버튼)
+      closeTermsBtn.addEventListener('click', function() {
+        modal.style.display = 'none';
+      });
+      
+      // 모달 외부 클릭 시 닫기
+      window.addEventListener('click', function(event) {
+        if (event.target == modal) {
+          modal.style.display = 'none';
+        }
+      });
+      
+      // PWA 설치 이벤트 캡처
+      window.addEventListener('beforeinstallprompt', (e) => {
+        // 자동 표시 방지
+        e.preventDefault();
+        // 이벤트 저장
+        deferredPrompt = e;
+        console.log('설치 프롬프트가 준비되었습니다.');
+      });
+      
+      // 설치 가이드 오버레이 닫기 버튼 이벤트
+      document.querySelectorAll('.overlay-close').forEach(function(closeBtn) {
+        closeBtn.addEventListener('click', function() {
+          document.getElementById('safariInstallGuide').style.display = 'none';
+          document.getElementById('iosChromeInstallGuide').style.display = 'none';
+          document.getElementById('androidChromeInstallGuide').style.display = 'none';
+        });
+      });
+
+      // 시작하기 버튼에 이벤트 리스너 추가
+      const startButton = document.querySelector('.action-button');
+      startButton.addEventListener('click', async function(event) {
+        // PC 환경인지 확인
+        if (isPcEnvironment()) {
+          // PC 환경이면 바로 index.html로 이동
+          window.location.href = 'index.html';
+          return;
+        }
+        
+        // PWA로 이미 설치되어 있는지 확인
+        if (!isPwaInstalled()) {
+          // 기본 링크 동작 방지
+          event.preventDefault();
+          
+          if (deferredPrompt) {
+            // Chrome, Edge 등 설치 프롬프트 지원 브라우저
+            deferredPrompt.prompt();
+            
+            try {
+              // 사용자 응답 기다림
+              const { outcome } = await deferredPrompt.userChoice;
+              console.log(`사용자 응답: ${outcome}`);
+              
+              if (outcome === 'accepted') {
+                // 설치가 수락됨
+                // 설치 완료 모달 표시
+                document.getElementById('installCompleteModal').style.display = 'block';
+                
+                // 설치 완료 이벤트 감지
+                window.addEventListener('appinstalled', () => {
+                  console.log('PWA가 설치되었습니다.');
+                }, { once: true });
+              } else {
+                // 설치가 거부됨 - index.html로 그대로 이동
+                window.location.href = 'index.html';
+              }
+            } catch (err) {
+              console.error('설치 프롬프트 오류:', err);
+              // 오류 발생 시 일반적인 방식으로 이동
+              window.location.href = 'index.html';
+            }
+            
+            // 프롬프트는 한 번만 사용 가능
+            deferredPrompt = null;
+          } else {
+            // Safari, iOS Chrome 등 설치 프롬프트 미지원 브라우저
+            showInstallGuide();
+          }
+        } else {
+          // 이미 PWA로 설치되어 있으면 index.html로 이동
+          window.location.href = 'index.html';
+        }
+      });
+      
+      // 설치 완료 모달 관련 이벤트
+      const installModal = document.getElementById('installCompleteModal');
+      const closeInstallBtn = document.querySelector('.close-install');
+      
+      // X 버튼으로 모달 닫기
+      if (closeInstallBtn) {
+        closeInstallBtn.addEventListener('click', function() {
+          installModal.style.display = 'none';
+          // 모달을 닫으면 메인 화면으로 이동
+          window.location.href = 'index.html';
+        });
+      }
+      
+      // 모달 외부 클릭 시 닫기
+      window.addEventListener('click', function(event) {
+        if (event.target == installModal) {
+          installModal.style.display = 'none';
+          window.location.href = 'index.html';
+        }
+      });
+    });
+  </script>
+</body>
+</html> 

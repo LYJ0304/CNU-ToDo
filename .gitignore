@@ -1,0 +1,65 @@
+# Node.js 관련
+node_modules/
+npm-debug.log
+yarn-error.log
+yarn-debug.log
+.pnpm-debug.log
+.npm
+
+# 환경 변수 및 보안 파일
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# 구글 서비스 계정 키 파일들 (민감한 정보)
+*.json
+!package.json
+!package-lock.json
+!mapping.json
+ga-config.json
+cnutodo-*.json
+
+# 로그 파일
+logs/
+*.log
+
+# 사용자 데이터 및 캐시
+storage/
+data/
+cache/
+pwa/AutoDCS-PWA/storage/
+pwa/AutoDCS-PWA/cache/
+pwa/AutoDCS-PWA/calendar-cache/
+server/data/
+server/logs/
+
+# 빌드 디렉토리
+/dist
+/build
+/out
+/.next
+
+# 캐시 디렉토리
+.cache/
+
+# 백업 파일
+*.backup
+*.bak
+*.swp
+*.swo
+
+# 운영체제 파일
+.DS_Store
+Thumbs.db
+
+# IDE 설정 파일
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# 기타
+.tmp
+.temp 

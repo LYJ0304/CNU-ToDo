@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>사이버캠퍼스 알리미</title>
+  <!-- iOS PWA 지원 메타 태그 -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="apple-touch-icon" href="icons/icon-152.png">
+  <link rel="manifest" href="manifest.json">
+  <!-- Google Material Icons 및 Material Symbols Outlined -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+  <link rel="stylesheet" href="css/client.css">
+  <script>
+    // 최초 방문자 확인하여 welcome 페이지로 리디렉션
+    document.addEventListener('DOMContentLoaded', function() {
+      const hasVisitedBefore = localStorage.getItem('has_visited_before');
+      if (!hasVisitedBefore && !window.location.href.includes('welcome.html')) {
+        localStorage.setItem('has_visited_before', 'true');
+        window.location.href = 'welcome.html';
+      }
+    });
+  </script>
+</head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y0BXKXB9RF"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-Y0BXKXB9RF');
+</script>
+<body>
+  <div class="container">
+    <!-- 메인 뷰 (#main): 할 일 목록 표시 -->
+    <div id="view-main" class="view active">
+      <div class="header">
+        <!-- 왼쪽: ToDo-List -->
+        <div class="left-title">나의 일정</div>
+        <!-- 오른쪽: 오늘 날짜 -->
+        <div id="todayDate"></div>
+      </div>
+      <div class="section">
+        <div id="fetchResult"></div>
+        <div id="resultFooter" class="result-footer">
+          <!-- 서버 데이터 update_time 표시 -->
+        <div id="updateInfo" class="update-info"></div>
+        <!-- 정렬 토글 버튼 -->
+        <div id="viewToggle" class="view-toggle">
+          <button id="toggleSubject" class = "toggle-left"class="active">과목</button>
+          <button id="toggleTime" class = "toggle-right">마감</button>
+        </div>
+        </div>
+        
+        <!-- 학번 미입력 시 안내 메시지 -->
+        <div id="noStudentNoGuide" class="guide-message" style="display: none;">
+          <div class="guide-message-title">
+            <span class="material-symbols-outlined">info</span>
+            학번 정보가 필요합니다
+          </div>
+          <p>사이버캠퍼스 알리미를 사용하기 위해서는 학번 입력이 필요합니다.</p>
+          <p><a href="#settings" class="guide-button">학번 입력하기</a></p>
+        </div>
+        
+        <!-- 데이터가 없을 때 안내 메시지 -->
+        <div id="noDataGuide" class="guide-message" style="display: none;">
+          <div class="guide-message-title">
+            <span class="material-symbols-outlined">help_outline</span>
+            데이터를 찾을 수 없습니다
+          </div>
+          <p>다음 사항을 확인해 주세요:</p>
+          <ul>
+            <li>Chrome 확장 프로그램(AutoDCS Extension)을 설치해야 합니다.</li>
+            <li>
+              <a href="https://chromewebstore.google.com/detail/daigfigieemjaigcbgoolahfmiemcegn" 
+                 target="_blank" class="guide-button">확장 프로그램 설치하기</a>
+            </li>
+          </ul>
+          
+          <div class="copy-link-container">
+            <div class="copy-link-text">store.cnutodo.kro.kr</div>
+            <button class="copy-link-button" onclick="copyStoreLink()">
+              <span class="material-symbols-outlined">content_copy</span>
+              복사
+            </button>
+          </div>
+          
+          <div class="guide-separator"></div>
+          
+          <p>확장 프로그램을 설치했는데도 정보가 보이지 않는다면:</p>
+          <ul>
+            <li>사이버캠퍼스에 접속하여 페이지를 새로고침해 보세요.</li>
+            <li>확장 프로그램이 최신 버전인지 확인하세요.</li>
+            <li>Chrome 브라우저를 재시작해 보세요.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!-- 달력 뷰 (#calendar) -->
+    <div id="view-calendar" class="view">
+      <div class="header">
+        <div class="left-title">학사 일정</div>
+          <div id="calendarDate" style="font-size:22px; font-weight:bold; text-align:right;"></div>
+        </div>
+      <div class="section">
+        <!-- ★ 학기 진행도 프로그레스바 -->
+        <div id="semesterProgress" style="margin:8px 0;">
+          <div class="progress-labels">
+            <span id="startDateLabel"></span>
+            <span id="endDateLabel"></span>
+          </div>
+          <div id="progressBar" style="width:100%; height:8px; background:var(--progress-bar-bg); border-radius:4px; overflow:hidden;">
+            <div id="progressFill" style="width:0%; height:100%; background:var(--progress-bar-fill);"></div>
+          </div>
+          <div id="progressText" style="text-align:right; font-size:12px; margin-top:4px;">0.00000%</div>
+        </div>
+      </div>
+        <!-- 월 네비게이션 -->
+        <div id="calNav" class="cal-nav">
+          <button id="prevMonth" class="nav-btn">‹</button>
+          <span id="calHeader"></span>
+          <button id="nextMonth" class="nav-btn">›</button>
+        </div>
+        <!-- 일정 목록이 들어갈 영역 -->
+        <div id="fetchResultCalendar"></div>
+      </div>
+    <!-- 설정 뷰 (#settings) -->
+    <div id="view-settings" class="view">
+      <div class="header">
+        <div class="left-title">설정</div>
+        <a href="welcome.html" class="help-link">
+          <span class="material-symbols-outlined">help_outline</span>
+        </a>
+      </div>
+      
+      <!-- 설정 뷰 학번 입력 부분 -->
+      <div class="settings-section">
+        <div class="settings-card">
+          <h3 class="settings-title">학번 설정</h3>
+          <div class="settings-content">
+            <div class="input-studentno">
+              <input type="text" id="studentnoInputSettings" placeholder="학번 입력" class="settings-input">
+              <button id="saveStudentNoButton" class="settings-btn">저장</button>
+            </div>
+            <p class="settings-description">* 학번은 서버에 해시 처리되어 저장됩니다.</p>
+          </div>
+  </div>
+</div>
+
+      <!-- 알림 시간 설정 -->
+      <div class="settings-card">
+        <h2>매일 알림 시간</h2>
+  <div class="setting-row">
+          <input type="time" id="dailyAlarmTime" value="09:00" class="settings-input">
+          <button id="saveAlarmTimeButton" class="settings-btn">저장</button>
+        </div>
+        <div class="settings-row">
+          <button id="unsubscribeButton" class="settings-btn settings-btn-danger">알림 해제</button>
+        </div>
+        <div class="notification-status">
+          <span class="status-indicator" id="notificationStatusIndicator"></span>
+          <span id="notificationStatusText">알림 상태 확인 중...</span>
+  </div>
+</div>
+
+      <!-- 테마 설정 -->
+      <div class="settings-card">
+        <h2>화면 테마</h2>
+  <div class="theme-preview-container">
+    <div id="lightThemePreview" class="theme-preview preview-light">
+      <div class="preview-window">
+        <div class="preview-titlebar"></div>
+        <div class="preview-content">
+          <div class="preview-header">나의 일정</div>
+          <div class="preview-todo-item">
+            <div class="preview-badge content">콘텐츠</div>
+            <div class="preview-text">1주차 강의</div>
+          </div>
+          <div class="preview-todo-item">
+            <div class="preview-badge task">과제</div>
+            <div class="preview-text">레포트 제출</div>
+          </div>
+        </div>
+      </div>
+      <div class="theme-preview-title">라이트 모드</div>
+    </div>
+    <div id="darkThemePreview" class="theme-preview preview-dark">
+      <div class="preview-window">
+        <div class="preview-titlebar"></div>
+        <div class="preview-content">
+          <div class="preview-header">나의 일정</div>
+          <div class="preview-todo-item">
+            <div class="preview-badge content">콘텐츠</div>
+            <div class="preview-text">1주차 강의</div>
+          </div>
+          <div class="preview-todo-item">
+            <div class="preview-badge task">과제</div>
+            <div class="preview-text">레포트 제출</div>
+          </div>
+        </div>
+      </div>
+      <div class="theme-preview-title">다크 모드</div>
+    </div>
+    <div id="systemThemePreview" class="theme-preview preview-auto">
+      <div class="auto-content">
+        <span class="material-symbols-outlined system-icon-auto">devices</span>
+        <div class="system-text">시스템 설정을<br>따릅니다</div>
+      </div>
+      <div class="theme-preview-title">자동</div>
+    </div>
+  </div>
+</div>
+
+      <!-- 제외 규칙 설정 -->
+      <div class="settings-card">
+        <h2>제외 규칙</h2>
+        <div class="exclusion-section-select">
+  <div class="exclusion-field">
+    <span class="exclusion-label">과목</span>
+            <select id="exclusionSubject" class="settings-input"></select>
+  </div>
+  <div class="exclusion-field">
+    <span class="exclusion-label">유형</span>
+            <select id="exclusionType" class="settings-input">
+      <option value="all">전체</option>
+      <option value="콘텐츠">콘텐츠</option>
+      <option value="토론">토론</option>
+      <option value="자료실">자료실</option>
+      <option value="과제">과제</option>
+      <option value="팀프로젝트">팀프로젝트</option>
+      <option value="퀴즈">퀴즈</option>
+      <option value="시험">시험</option>
+    </select>
+  </div>
+  <div class="exclusion-field">
+    <span class="exclusion-label">세부 항목</span>
+            <select id="exclusionItem" class="settings-input">
+      <option value="all">전체</option>
+    </select>
+  </div>
+  <div class="exclusion-field">
+    <span class="exclusion-label">제외할 영역</span>
+            <select id="exclusionArea" class="settings-input">
+      <option value="all">전체</option>
+      <option value="home">홈 화면</option>
+      <option value="alarm">푸시 알림</option>
+    </select>
+  </div>
+</div>
+        <div class="settings-footer">
+          <button id="addExclusionRuleButton" class="settings-btn">규칙 추가</button>
+        </div>
+        <div id="exclusionRulesList" style="margin-top: 15px;"></div>
+        </div>
+
+      <!-- PWA 설치 상태 -->
+      <div class="settings-card">
+        <h2>앱 상태</h2>
+        <div class="settings-info" id="pwaStatusInfo">확인 중...</div>
+        <div class="settings-footer" id="pwaInstallContainer" style="display: none;">
+          <button id="pwaInstallButton" class="settings-btn">앱 설치하기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- 하단 네비게이터 바: Material Icons (텍스트 없음) -->
+  <div class="nav-bar">
+    <a href="#main"><span class="material-icons">home</span></a>
+    <a href="#calendar"><span class="material-icons">calendar_month</span></a>
+    <a href="#settings"><span class="material-symbols-outlined">settings</span></a>
+  </div>
+  <!-- 메인 화면 우측 하단에 원 모양 새로고침 버튼 추가 -->
+  <button id="circleRefreshButton" class="circle-refresh">
+    <span class="refresh-icon material-symbols-outlined">sync</span>
+  </button>
+
+  <div id="snackbar"></div>
+
+  <!-- 사용자 분석을 위한 로깅 스크립트 -->
+  <script src="js/analytics.js"></script>
+  <script src="js/cnutodo_client.js"></script>
+
+
+</body>
+</html>

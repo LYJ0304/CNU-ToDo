@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="safari-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2196f3"/>
+      <stop offset="100%" stop-color="#1976d2"/>
+    </linearGradient>
+  </defs>
+  <circle cx="50" cy="50" r="45" fill="#fff"/>
+  <circle cx="50" cy="50" r="40" fill="url(#safari-gradient)"/>
+  <circle cx="50" cy="50" r="38" fill="#fff"/>
+  <circle cx="50" cy="50" r="36" fill="url(#safari-gradient)"/>
+  <line x1="50" y1="20" x2="50" y2="80" stroke="#fff" stroke-width="2"/>
+  <line x1="20" y1="50" x2="80" y2="50" stroke="#fff" stroke-width="2"/>
+  <circle cx="50" cy="50" r="5" fill="#e91e63"/>
+  <path d="M50 15L53 25L50 20L47 25Z" fill="#fff"/>
+  <path d="M50 85L53 75L50 80L47 75Z" fill="#fff"/>
+  <path d="M15 50L25 53L20 50L25 47Z" fill="#fff"/>
+  <path d="M85 50L75 53L80 50L75 47Z" fill="#fff"/>
+  <path d="M32 32L38 38M68 32L62 38M32 68L38 62M68 68L62 62" stroke="#fff" stroke-width="1"/>
+</svg> 

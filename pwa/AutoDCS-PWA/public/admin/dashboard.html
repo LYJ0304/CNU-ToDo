@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>사이버캠퍼스 알리미 - 관리자 대시보드</title>
+  <!-- Chart.js 라이브러리 -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --primary-color: #004099;
+      --secondary-color: #3a6bc5;
+      --background-color: #f5f7fa;
+      --card-background: #ffffff;
+      --text-color: #333333;
+      --border-color: #e1e4e8;
+      --success-color: #28a745;
+      --warning-color: #ffc107;
+      --danger-color: #dc3545;
+      --muted-color: #6c757d;
+    }
+
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background-color: var(--background-color);
+      margin: 0;
+      padding: 0;
+      color: var(--text-color);
+    }
+
+    .dashboard-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    h1 {
+      color: var(--primary-color);
+      margin: 0;
+    }
+
+    .date-range {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .date-range select {
+      padding: 8px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      background-color: var(--card-background);
+    }
+
+    .card {
+      background-color: var(--card-background);
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background-color: var(--card-background);
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      padding: 20px;
+      text-align: center;
+    }
+
+    .stat-card h3 {
+      margin-top: 0;
+      color: var(--muted-color);
+      font-size: 14px;
+      font-weight: normal;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .stat-value {
+      font-size: 36px;
+      font-weight: bold;
+      color: var(--primary-color);
+      margin: 10px 0;
+    }
+
+    .stat-detail {
+      font-size: 14px;
+      color: var(--muted-color);
+      margin-bottom: 0;
+    }
+
+    .chart-container {
+      height: 300px;
+      margin-bottom: 30px;
+    }
+
+    .chart-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--muted-color);
+    }
+
+    .loading:after {
+      content: ".";
+      animation: dots 1.5s steps(5, end) infinite;
+    }
+
+    @keyframes dots {
+      0%, 20% {
+        content: ".";
+      }
+      40% {
+        content: "..";
+      }
+      60% {
+        content: "...";
+      }
+      80%, 100% {
+        content: "";
+      }
+    }
+
+    .error-message {
+      color: var(--danger-color);
+      text-align: center;
+      padding: 20px;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      color: var(--muted-color);
+      font-size: 14px;
+      padding: 20px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .refresh-button {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 16px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .refresh-button:hover {
+      background-color: var(--secondary-color);
+    }
+
+    .table-container {
+      overflow-x: auto;
+      margin-bottom: 30px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    table th, table td {
+      padding: 12px 15px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    table th {
+      background-color: var(--background-color);
+      font-weight: bold;
+    }
+
+    tr:hover {
+      background-color: rgba(0, 64, 153, 0.05);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .badge-success {
+      background-color: rgba(40, 167, 69, 0.1);
+      color: var(--success-color);
+    }
+
+    .badge-warning {
+      background-color: rgba(255, 193, 7, 0.1);
+      color: var(--warning-color);
+    }
+
+    .badge-danger {
+      background-color: rgba(220, 53, 69, 0.1);
+      color: var(--danger-color);
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    <header>
+      <h1>사이버캠퍼스 알리미 관리자 대시보드</h1>
+      <div class="date-range">
+        <select id="dateRangeSelect">
+          <option value="7">최근 7일</option>
+          <option value="30" selected>최근 30일</option>
+          <option value="90">최근 90일</option>
+        </select>
+        <button class="refresh-button" id="refreshButton">새로고침</button>
+      </div>
+    </header>
+
+    <div class="stats-grid">
+      <div class="stat-card" id="totalUsers">
+        <h3>총 사용자 수</h3>
+        <div class="stat-value">-</div>
+        <div class="stat-detail">누적 사용자 수</div>
+      </div>
+      <div class="stat-card" id="dailyActiveUsers">
+        <h3>일일 활성 사용자</h3>
+        <div class="stat-value">-</div>
+        <div class="stat-detail">오늘 방문 사용자</div>
+      </div>
+      <div class="stat-card" id="totalInstallations">
+        <h3>총 설치 수</h3>
+        <div class="stat-value">-</div>
+        <div class="stat-detail">PWA 설치 횟수</div>
+      </div>
+      <div class="stat-card" id="subscriberCount">
+        <h3>알림 구독자</h3>
+        <div class="stat-value">-</div>
+        <div class="stat-detail">활성 구독자 수</div>
+      </div>
+    </div>
+
+    <div class="chart-row">
+      <div class="card">
+        <h2>일일 사용자 추이</h2>
+        <div class="chart-container">
+          <canvas id="userChart"></canvas>
+          <div id="userChartLoading" class="loading">데이터 로딩 중</div>
+        </div>
+      </div>
+      <div class="card">
+        <h2>주요 기능 사용</h2>
+        <div class="chart-container">
+          <canvas id="featureChart"></canvas>
+          <div id="featureChartLoading" class="loading">데이터 로딩 중</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-row">
+      <div class="card">
+        <h2>사용자 유지율</h2>
+        <div class="chart-container">
+          <canvas id="retentionChart"></canvas>
+          <div id="retentionChartLoading" class="loading">데이터 로딩 중</div>
+        </div>
+      </div>
+      <div class="card">
+        <h2>알림 구독 현황</h2>
+        <div class="chart-container">
+          <canvas id="subscriberChart"></canvas>
+          <div id="subscriberChartLoading" class="loading">데이터 로딩 중</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>주요 이벤트</h2>
+      <div class="table-container">
+        <table id="eventsTable">
+          <thead>
+            <tr>
+              <th>이벤트</th>
+              <th>횟수</th>
+              <th>사용자당</th>
+              <th>비율</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="4" class="loading">데이터 로딩 중</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2023 사이버캠퍼스 알리미 - 관리자 전용 페이지</p>
+  </footer>
+
+  <script>
+    // 차트 인스턴스를 저장할 객체
+    const charts = {};
+    // 선택된 날짜 범위
+    let selectedDays = 30;
+
+    // DOM이 로드된 후 실행
+    document.addEventListener('DOMContentLoaded', () => {
+      // 초기 데이터 로드
+      loadAllData();
+
+      // 날짜 범위 변경 이벤트
+      document.getElementById('dateRangeSelect').addEventListener('change', (e) => {
+        selectedDays = parseInt(e.target.value);
+        loadAllData();
+      });
+
+      // 새로고침 버튼 이벤트
+      document.getElementById('refreshButton').addEventListener('click', () => {
+        loadAllData();
+      });
+    });
+
+    // 모든 데이터 로드 함수
+    async function loadAllData() {
+      try {
+        // 각 데이터 병렬로 로드
+        const [dailyUsers, installations, features, retention, subscribers] = await Promise.all([
+          fetchData(`/admin/analytics/daily-users?days=${selectedDays}`),
+          fetchData('/admin/analytics/installations'),
+          fetchData('/admin/analytics/features'),
+          fetchData(`/admin/analytics/retention?days=${selectedDays}`),
+          fetchData('/admin/analytics/subscribers')
+        ]);
+
+        // 데이터 업데이트
+        updateStats(dailyUsers, installations, subscribers);
+        updateUserChart(dailyUsers);
+        updateFeatureChart(features);
+        updateRetentionChart(retention);
+        updateSubscriberChart(subscribers);
+        updateEventsTable(features);
+      } catch (error) {
+        console.error('데이터 로드 오류:', error);
+        showError('데이터를 불러오는 중 오류가 발생했습니다.');
+      }
+    }
+
+    // API 데이터 가져오기
+    async function fetchData(endpoint) {
+      const response = await fetch(endpoint);
+      if (!response.ok) {
+        throw new Error(`API 요청 실패: ${response.status}`);
+      }
+      return response.json();
+    }
+
+    // 통계 카드 업데이트
+    function updateStats(dailyUsers, installations, subscribers) {
+      // 총 사용자 수
+      const totalUsers = dailyUsers?.rows?.length > 0 
+        ? dailyUsers.rows.reduce((sum, row) => sum + Number(row.metrics.activeUsers || 0), 0)
+        : 0;
+      document.querySelector('#totalUsers .stat-value').textContent = totalUsers.toLocaleString();
+
+      // 일일 활성 사용자
+      const today = dailyUsers?.rows?.find(row => {
+        const today = new Date().toISOString().split('T')[0];
+        return row.dimensions.date === today;
+      });
+      document.querySelector('#dailyActiveUsers .stat-value').textContent = 
+        today ? Number(today.metrics.activeUsers).toLocaleString() : '0';
+
+      // 총 설치 수
+      document.querySelector('#totalInstallations .stat-value').textContent =
+        installations?.installations?.toLocaleString() || '0';
+
+      // 구독자 수
+      document.querySelector('#subscriberCount .stat-value').textContent =
+        subscribers?.current.toLocaleString() || '0';
+    }
+
+    // 사용자 차트 업데이트
+    function updateUserChart(data) {
+      const loading = document.getElementById('userChartLoading');
+      
+      if (!data || !data.rows || data.rows.length === 0) {
+        loading.textContent = '데이터가 없습니다';
+        return;
+      }
+
+      loading.style.display = 'none';
+      
+      // 데이터 가공
+      const labels = data.rows.map(row => {
+        const date = row.dimensions.date;
+        return `${date.substring(5, 7)}/${date.substring(8, 10)}`;
+      });
+      
+      const activeUsers = data.rows.map(row => Number(row.metrics.activeUsers || 0));
+      const sessions = data.rows.map(row => Number(row.metrics.sessions || 0));
+      
+      // 차트 생성 또는 업데이트
+      if (charts.userChart) {
+        charts.userChart.data.labels = labels;
+        charts.userChart.data.datasets[0].data = activeUsers;
+        charts.userChart.data.datasets[1].data = sessions;
+        charts.userChart.update();
+      } else {
+        const ctx = document.getElementById('userChart').getContext('2d');
+        charts.userChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: '활성 사용자',
+                data: activeUsers,
+                borderColor: '#004099',
+                backgroundColor: 'rgba(0, 64, 153, 0.1)',
+                tension: 0.3,
+                fill: true
+              },
+              {
+                label: '세션 수',
+                data: sessions,
+                borderColor: '#3a6bc5',
+                backgroundColor: 'rgba(58, 107, 197, 0.1)',
+                tension: 0.3,
+                fill: true
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: 'top',
+              }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  precision: 0
+                }
+              }
+            }
+          }
+        });
+      }
+    }
+
+    // 기능 사용 차트 업데이트
+    function updateFeatureChart(data) {
+      const loading = document.getElementById('featureChartLoading');
+      
+      if (!data || !data.rows || data.rows.length === 0) {
+        loading.textContent = '데이터가 없습니다';
+        return;
+      }
+
+      loading.style.display = 'none';
+      
+      // 가장 많이 사용된 액션 상위 10개 필터링
+      const topFeatures = data.rows
+        .filter(row => !row.dimensions.eventName.startsWith('_')) // 내부 이벤트 제외
+        .sort((a, b) => Number(b.metrics.eventCount) - Number(a.metrics.eventCount))
+        .slice(0, 10);
+      
+      const labels = topFeatures.map(row => {
+        // 이벤트 이름 가독성 개선
+        const name = row.dimensions.eventName.replace(/_/g, ' ');
+        return name.charAt(0).toUpperCase() + name.slice(1);
+      });
+      
+      const counts = topFeatures.map(row => Number(row.metrics.eventCount));
+      
+      // 차트 생성 또는 업데이트
+      if (charts.featureChart) {
+        charts.featureChart.data.labels = labels;
+        charts.featureChart.data.datasets[0].data = counts;
+        charts.featureChart.update();
+      } else {
+        const ctx = document.getElementById('featureChart').getContext('2d');
+        charts.featureChart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: '사용 횟수',
+              data: counts,
+              backgroundColor: [
+                'rgba(0, 64, 153, 0.7)',
+                'rgba(58, 107, 197, 0.7)',
+                'rgba(100, 149, 237, 0.7)',
+                'rgba(135, 206, 250, 0.7)',
+                'rgba(0, 191, 255, 0.7)',
+                'rgba(30, 144, 255, 0.7)',
+                'rgba(0, 128, 255, 0.7)',
+                'rgba(0, 102, 204, 0.7)',
+                'rgba(65, 105, 225, 0.7)',
+                'rgba(0, 0, 205, 0.7)'
+              ]
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: false
+              }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  precision: 0
+                }
+              }
+            }
+          }
+        });
+      }
+    }
+
+    // 유지율 차트 업데이트
+    function updateRetentionChart(data) {
+      const loading = document.getElementById('retentionChartLoading');
+      
+      if (!data || !data.rows || data.rows.length === 0) {
+        loading.textContent = '데이터가 없습니다';
+        return;
+      }
+
+      loading.style.display = 'none';
+      
+      // 데이터 가공
+      const labels = data.rows.map(row => {
+        const date = row.dimensions.date;
+        return `${date.substring(5, 7)}/${date.substring(8, 10)}`;
+      });
+      
+      const newUsers = data.rows.map(row => Number(row.metrics.newUsers || 0));
+      const returnedUsers = data.rows.map(row => Number(row.metrics.returnedUsers || 0));
+      
+      // 차트 생성 또는 업데이트
+      if (charts.retentionChart) {
+        charts.retentionChart.data.labels = labels;
+        charts.retentionChart.data.datasets[0].data = newUsers;
+        charts.retentionChart.data.datasets[1].data = returnedUsers;
+        charts.retentionChart.update();
+      } else {
+        const ctx = document.getElementById('retentionChart').getContext('2d');
+        charts.retentionChart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: '신규 사용자',
+                data: newUsers,
+                backgroundColor: 'rgba(0, 64, 153, 0.7)'
+              },
+              {
+                label: '재방문 사용자',
+                data: returnedUsers,
+                backgroundColor: 'rgba(58, 107, 197, 0.7)'
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: 'top',
+              }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                stacked: false,
+                ticks: {
+                  precision: 0
+                }
+              },
+              x: {
+                stacked: false
+              }
+            }
+          }
+        });
+      }
+    }
+
+    // 구독자 차트 업데이트
+    function updateSubscriberChart(data) {
+      const loading = document.getElementById('subscriberChartLoading');
+      
+      if (!data) {
+        loading.textContent = '데이터가 없습니다';
+        return;
+      }
+
+      loading.style.display = 'none';
+      
+      // 데이터 준비
+      const subscriberData = [
+        data.current || 0,
+        data.subscribed || 0,
+        data.unsubscribed || 0
+      ];
+      
+      // 차트 생성 또는 업데이트
+      if (charts.subscriberChart) {
+        charts.subscriberChart.data.datasets[0].data = subscriberData;
+        charts.subscriberChart.update();
+      } else {
+        const ctx = document.getElementById('subscriberChart').getContext('2d');
+        charts.subscriberChart = new Chart(ctx, {
+          type: 'pie',
+          data: {
+            labels: ['현재 구독자', '구독 횟수', '구독 해제'],
+            datasets: [{
+              data: subscriberData,
+              backgroundColor: [
+                'rgba(40, 167, 69, 0.7)',
+                'rgba(0, 123, 255, 0.7)',
+                'rgba(220, 53, 69, 0.7)'
+              ],
+              borderColor: [
+                'rgba(40, 167, 69, 1)',
+                'rgba(0, 123, 255, 1)',
+                'rgba(220, 53, 69, 1)'
+              ],
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false
+          }
+        });
+      }
+    }
+
+    // 이벤트 테이블 업데이트
+    function updateEventsTable(data) {
+      const tableBody = document.querySelector('#eventsTable tbody');
+      
+      if (!data || !data.rows || data.rows.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="4">데이터가 없습니다</td></tr>';
+        return;
+      }
+      
+      // 가장 많이 사용된 액션 필터링 및 정렬
+      const events = data.rows
+        .filter(row => !row.dimensions.eventName.startsWith('_')) // 내부 이벤트 제외
+        .sort((a, b) => Number(b.metrics.eventCount) - Number(a.metrics.eventCount));
+      
+      // 전체 이벤트 횟수 계산
+      const totalEvents = events.reduce((sum, row) => sum + Number(row.metrics.eventCount), 0);
+      
+      // 테이블 내용 생성
+      let html = '';
+      events.forEach(row => {
+        const count = Number(row.metrics.eventCount);
+        const perUser = Number(row.metrics.eventCountPerUser).toFixed(2);
+        const percentage = ((count / totalEvents) * 100).toFixed(1);
+        
+        // 이벤트 이름 가독성 개선
+        let eventName = row.dimensions.eventName.replace(/_/g, ' ');
+        eventName = eventName.charAt(0).toUpperCase() + eventName.slice(1);
+        
+        // 비율에 따른 배지 스타일 결정
+        let badgeClass = 'badge-success';
+        if (percentage < 5) badgeClass = 'badge-warning';
+        if (percentage < 1) badgeClass = 'badge-danger';
+        
+        html += `
+          <tr>
+            <td>${eventName}</td>
+            <td>${count.toLocaleString()}</td>
+            <td>${perUser}</td>
+            <td><span class="badge ${badgeClass}">${percentage}%</span></td>
+          </tr>
+        `;
+      });
+      
+      tableBody.innerHTML = html;
+    }
+
+    // 오류 표시 함수
+    function showError(message) {
+      // 모든 로딩 표시를 오류 메시지로 변경
+      document.querySelectorAll('.loading').forEach(el => {
+        el.textContent = message;
+        el.classList.remove('loading');
+        el.classList.add('error-message');
+      });
+    }
+  </script>
+</body>
+</html> 

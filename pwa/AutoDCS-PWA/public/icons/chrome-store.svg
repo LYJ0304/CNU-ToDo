@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 120">
+  <rect x="0" y="0" width="300" height="120" rx="10" fill="#f5f5f5"/>
+  <circle cx="50" cy="60" r="30" fill="#4285f4"/>
+  <circle cx="50" cy="60" r="12" fill="#fff"/>
+  <circle cx="50" cy="60" r="8" fill="#ea4335"/>
+  <path d="M50 38v10M30 60h10M50 82v-10M70 60h-10" stroke="#fff" stroke-width="6"/>
+  <text x="100" y="55" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#333">AutoDCS</text>
+  <text x="100" y="80" font-family="Arial, sans-serif" font-size="16" fill="#666">Chrome 확장 프로그램</text>
+</svg> 

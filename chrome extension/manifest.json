@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "CNU Todo Extension",
+  "version": "1.0.004",
+  "action": {
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
+  "permissions": [
+    "storage",
+    "scripting",
+    "webNavigation"
+  ],
+  "host_permissions": [
+    "https://dcs-learning.cnu.ac.kr/*",
+    "http://autodcs.kro.kr:9943/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  }
+}

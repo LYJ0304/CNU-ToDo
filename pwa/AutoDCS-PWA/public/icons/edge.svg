@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="edge-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0078d7"/>
+      <stop offset="100%" stop-color="#0a59a7"/>
+    </linearGradient>
+    <linearGradient id="edge-wave" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1ac6ff"/>
+      <stop offset="50%" stop-color="#0075c9"/>
+      <stop offset="100%" stop-color="#0c59a7"/>
+    </linearGradient>
+  </defs>
+  <circle cx="50" cy="50" r="45" fill="#fff"/>
+  <path d="M17,50 a1,1 0 0,0 66,0 a1,1 0 0,0 -66,0" fill="url(#edge-gradient)"/>
+  <path d="M83,50 a1,1 0 0,1 -66,0" fill="url(#edge-wave)" stroke="#fff" stroke-width="1"/>
+  <ellipse cx="50" cy="50" rx="13" ry="25" fill="#fff"/>
+  <circle cx="50" cy="50" r="9" fill="#80c3e6"/>
+</svg> 

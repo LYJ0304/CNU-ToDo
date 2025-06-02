@@ -1,0 +1,1042 @@
+    /* 다크모드 색상 변수 */
+    :root {
+      --background-color: #f0f2f5;
+      --card-background: #fff;
+      --text-color: #333;
+      --secondary-text: #666;
+      --border-color: #ddd;
+      --primary-color: #004099;
+      --item-background: #f8f8f8;
+      --shadow-color: rgba(0, 0, 0, 0.1);
+      --shadow-color-heavy: rgba(0, 0, 0, 0.3);
+      --accent-color: #ff3333;
+      --accent-bg: #fff0f0;
+      --accent-border: #ff3333;
+      --badge-bg: #9bbcff;
+      --badge-text: #333;
+      --todo-date-bg: #333;
+      --todo-date-text: #fff;
+      --progress-bar-bg: #e0e0e0;
+      --progress-bar-fill: #4caf50;
+      --extra-submit-color: #004099;
+      --toggle-button-bg: #e0e0e0;
+      --button-hover-bg: #003080;
+      --nav-text: #004099;
+      --nav-active: #1f3e7a;
+      --exclusion-item-bg: #f8f8f8;
+      --exclusion-item-border: #ddd;
+    }
+
+    /* 스크롤바 숨김 설정 */
+    /* Webkit 브라우저(Chrome, Safari 등) */
+    ::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+      background: transparent;
+    }
+    
+    /* Firefox */
+    html, body {
+      scrollbar-width: none;
+    }
+    
+    /* IE, Edge */
+    * {
+      -ms-overflow-style: none;
+    }
+
+    .dark-mode {
+      --background-color: #121212;
+      --card-background: #1e1e1e;
+      --text-color: #f0f0f0;
+      --secondary-text: #bbb;
+      --border-color: #444;
+      --primary-color: #3a6bc5;
+      --item-background: #2a2a2a;
+      --shadow-color: rgba(0, 0, 0, 0.4);
+      --shadow-color-heavy: rgba(0, 0, 0, 0.6);
+      --accent-color: #ff6b6b;
+      --accent-bg: #331111;
+      --accent-border: #ff6b6b;
+      --badge-bg: #3a6bc5;
+      --badge-text: #f0f0f0;
+      --todo-date-bg: #444;
+      --todo-date-text: #fff;
+      --progress-bar-bg: #333;
+      --progress-bar-fill: #5bc967;
+      --nav-btn-bg: #3a6bc5;
+      --extra-submit-color: #4c8dff;
+      --toggle-button-bg: #2a2a2a;
+      --button-hover-bg: #1f56c5;
+      --nav-text: #4c8dff;
+      --nav-active: #3a6bc5;
+      --exclusion-item-bg: #2a2a2a;
+      --exclusion-item-border: #444;
+    }
+
+    /* 전체 레이아웃 */
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background-color: var(--background-color);
+      margin: 0;
+      padding-bottom: 120px; /* 하단 네비게이터 바 공간 확보 */
+      color: var(--text-color);
+    }
+    .container {
+      max-width: 500px;
+      margin: 20px auto;
+      background: var(--card-background);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px var(--shadow-color);
+    }
+    /* 헤더 영역: 왼쪽에는 ToDo-List, 오른쪽에는 오늘 날짜 (폰트 크기 22px) */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+    .left-title {
+      font-weight: bold;
+      text-align: left;
+    }
+    #todayDate {
+      font-weight: bold;
+      text-align: right;
+    }
+    /* 뷰 영역 (기본 숨김) */
+    .view {
+      display: none;
+    }
+    .view.active {
+      display: block;
+    }
+    /* 섹션 및 입력 스타일 */
+    .section {
+      margin: 20px 0;
+    }
+    input[type="text"],
+    input[type="time"],
+    input[type="datetime-local"],
+    select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 4px;
+      box-sizing: border-box;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      font-size: 16px;
+      background-color: var(--card-background);
+      color: var(--text-color);
+    }
+    button {
+      padding: 12px;
+      background-color: var(--primary-color);
+      border: none;
+      color: #fff;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 12px;
+      transition: background-color 0.2s;
+    }
+    
+    button:hover {
+      background-color: var(--button-hover-bg);
+    }
+
+    /* 하단 네비게이터 바 */
+    .nav-bar {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 80px;
+      background-color: var(--card-background);
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      font-size: 16px;
+      z-index: 100;
+      box-shadow: 0 -2px 10px var(--shadow-color);
+    }
+    .nav-bar a {
+      text-decoration: none;
+      color: var(--nav-text);
+      flex: 1;
+      text-align: center;
+      transition: color 0.2s;
+    }
+    .nav-bar a:hover {
+      color: var(--nav-active);
+    }
+    .material-icons,
+    .material-symbols-outlined {
+      font-size: 28px;
+      line-height: 50px;
+      top: -10px;
+      position: relative;
+    }
+    /* 새로고침 버튼 아이콘 전용: top 값을 0으로 설정하여 중앙 정렬 */
+    .refresh-icon {
+      top: 0;
+      position: relative;
+    }
+    /* 추가할 CSS */
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(-360deg); }
+    }
+    .refresh-icon.spin {
+      animation: spin 0.5s linear;
+    }
+    /* 메인 뷰 ToDo-List 디자인 개선 */
+    .todo-item {
+      display: flex;
+      align-items: center;  /* flex-start에서 center로 변경 */
+      margin: 8px 0;
+      padding:8px;
+      background: var(--item-background);
+      box-shadow: 0 2px 5px var(--shadow-color);
+      border-radius: 6px;
+      transition: transform 0.15s, box-shadow 0.15s;
+      min-height: 36px;
+    }
+    
+    .todo-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px var(--shadow-color);
+    }
+    
+    /* 배지 스타일 개선 */
+    .badge-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 6px;
+      align-self: center;
+      flex-shrink: 0;  /* 배지가 줄어들지 않도록 설정 */
+      white-space: nowrap;  /* 배지 내용이 한 줄로만 표시되도록 설정 */
+    }
+    
+    .badge {
+      display: inline-block;
+      padding: 4px 8px;
+      background-color: var(--badge-bg);
+      color: var(--badge-text);
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: bold;
+      box-shadow: 0 1px 3px var(--shadow-color);
+      white-space: nowrap;  /* 배지 내용이 한 줄로만 표시되도록 설정 */
+    }
+    
+    .dark-mode .badge {
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* 그룹 헤더 스타일 개선 */
+    .group-header {
+      font-size: 20px;
+      font-weight: bold;
+      cursor: default;
+      margin: 20px 0 10px 0;
+      padding-bottom: 5px;
+      color: var(--text-color);
+    }
+    #fetchResult .group-container > div > ul {
+      margin: 16px 0 8px 0; /* 위 16px | 좌·우 0 | 아래 8px */
+    }
+    /* #fetchResult > div:nth-child(3) > ul 하단 margin을 8px로 */
+    #fetchResult > div > ul {
+      margin-bottom: 8px;   /* 필요하면 !important로 우선순위 확보 */
+    }
+    .badge-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 6px;
+      align-self: center;
+    }
+    /* 추가: 제목·추가제출 묶음 */
+    .item-text-wrap  { display:flex; flex-direction:column; flex:1; }
+
+    /* 제목 */
+    .item-title      { font-size:16px; word-break:break-word; }
+
+    /* 추가 제출 안내 */
+    .item-extra      { font-size:12px; word-break:break-word; color:var(--extra-submit-color); }
+    .todo-date {
+      background: var(--todo-date-bg);
+      color: var(--todo-date-text);
+      font-size: 12px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      display: inline-block;
+      font-weight: 500;
+    }
+    /* 원 모양의 새로고침 버튼 (우측 하단에 배치) */
+    .circle-refresh {
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: var(--primary-color);
+      border: none;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 5px var(--shadow-color-heavy);
+      cursor: pointer;
+      z-index: 200;
+    }
+    .section-exclusion-select {
+      display: flex;
+      flex-direction: column;   /* ← 세로 배치 */
+      gap: 10px;                /* 필드 사이 간격 */
+    }
+    .exclusion-field    { display: flex; flex-direction: column; }
+    .exclusion-label    { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .today-header {
+      display: inline-block;
+      border: 2px solid var(--accent-border);
+      border-radius: 6px;
+      padding: 4px 10px;
+      color: var(--accent-color);
+      background: var(--accent-bg);
+    }
+    .item-time {
+      margin-left: auto; /* 오른쪽 끝으로 밀기 */
+      font-size: 12px;
+      color: var(--secondary-text);
+      align-self: center; /* 세로 가운데 정렬 */
+    }
+    .time-header {
+      font-size: 14px;
+      font-weight: bold;
+      margin: 6px 0 2px 10px; /* 위·좌 여백만 살짝, 아래는 2px */
+    }
+
+    .view-toggle {
+      display:flex;
+      justify-content:center; 
+      margin-top: 0px;
+      margin-bottom: 8px; 
+      float: right;
+    }
+    .view-toggle button {
+      flex:1; padding:6px 18px; border:none;
+      background:var(--toggle-button-bg);
+      font-size:14px; cursor:pointer;
+      color: var(--text-color);
+      font-weight: 500;
+    }
+    .view-toggle button.active {
+      background:var(--primary-color);
+      color:#fff;
+    }
+    .toggle-left { border-radius: 6px 0 0 6px; }
+    .toggle-right { border-radius: 0 6px 6px 0; }
+
+    .input-studentno {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .input-studentno input {
+      flex: 1;
+    }
+
+    /* 설정 화면에서 입력-버튼을 가로 배치 */
+    .setting-row {
+      display: flex;
+      gap: 8px;            /* 사이 간격 */
+      align-items: center; /* 높이 정렬 */
+      margin-bottom: 10px;
+    }
+
+    /* 버튼이 너무 높게 보이지 않도록 */
+    .setting-row button {
+      white-space: nowrap; /* 줄바꿈 방지 */
+    }
+
+    .progress-labels{
+      display:flex; justify-content:space-between; 
+      font-size:12px; 
+      margin-bottom:4px;
+    }
+    /* 간단한 스타일 */
+    .cal-nav{
+      display:flex;justify-content:center;align-items:center;gap:12px;
+      font-size:18px;font-weight:bold;margin:6px 0 8px;
+    }
+    .nav-btn{
+      border:none;
+      background:var(--primary-color);
+      border-radius:4px;
+      width:20px;
+      height:28px;
+      cursor:pointer;
+      font-size:20px;
+      margin-top: 0px;
+      padding: 0px;
+      color: #fff;
+    }
+    /* 추가: 인라인 스타일 대체용 CSS */
+    .sub-section {
+      margin-bottom: 10px;
+    }
+    .todo-ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    /* resultFooter: fetchResult 하단에서 updateInfo(왼쪽) / toggle(오른쪽) 배치 */
+    .result-footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 8px;
+    }
+    /* updateInfo: 작은 회색 텍스트 */
+    .update-info {
+      font-size: 12px;
+      color: var(--secondary-text);
+    }
+    .nomarginbutton{
+      margin-top: 4px;
+    }
+    /* snackbar: 알림 메시지 */
+    #snackbar {
+      visibility:hidden;          /* 기본 숨김 */
+      min-width:200px;
+      background:#323232;
+      color:#fff;
+      text-align:center;
+      border-radius:4px;
+      padding:12px 16px;
+      position:fixed;
+      left:50%; bottom:80px;      /* 하단 고정 */
+      transform:translateX(-50%);
+      z-index:9999;
+      font-size:14px;
+      opacity:0; transition:opacity .3s;
+    }
+    #snackbar.show {
+      visibility:visible;
+      opacity:1;
+    }
+
+    /* 다크모드 토글 스위치 */
+    .theme-toggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      align-items: center;
+    }
+    .theme-toggle .material-icons {
+      font-size: 20px;
+      cursor: pointer;
+      color: var(--text-color);
+      margin-left: 8px;
+      top: 0;
+    }
+
+    /* 테마 프리뷰 스타일 */
+    .theme-preview-container {
+      display: flex;
+      justify-content: space-between;
+      margin: 20px 0;
+      gap: 15px;
+    }
+
+    .theme-preview {
+      width: 30%;
+      height: 110px;
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+      border: 3px solid transparent;
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.3s;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      flex-direction: column;
+    }
+
+    .theme-preview.selected {
+      border-color: #1f6ed4;
+      box-shadow: 0 6px 15px rgba(31, 110, 212, 0.5);
+    }
+
+    .dark-mode .theme-preview.selected {
+      border-color: #4c8dff;
+      box-shadow: 0 6px 15px rgba(76, 141, 255, 0.5);
+    }
+
+    .theme-preview:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .theme-preview-title {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      text-align: center;
+      padding: 8px;
+      font-size: 12px;
+      font-weight: bold;
+      background-color: rgba(0, 0, 0, 0.6);
+      color: white;
+      z-index: 10;
+    }
+
+    /* 라이트 모드와 다크 모드 공통 프리뷰 요소 */
+    .preview-window {
+
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .preview-content {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      bottom: 5px;
+    }
+
+    .preview-header {
+      font-size: 12px;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    .preview-todo-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 4px;
+      padding: 3px;
+      border-radius: 3px;
+    }
+
+    .preview-badge {
+      font-size: 7px;
+      padding: 2px 3px;
+      margin-right: 3px;
+      border-radius: 2px;
+    }
+
+    .preview-text {
+      font-size: 7px;
+    }
+
+    /* 라이트 모드 프리뷰 */
+    .preview-light {
+      background: #f0f2f5;
+
+    }
+
+    .preview-light .preview-window {
+      background-color: #fff;
+    }
+
+    .preview-light .preview-titlebar {
+      background-color: #004099;
+    }
+
+    .preview-light .preview-header {
+      color: #333;
+    }
+
+    .preview-light .preview-todo-item {
+      background-color: #f8f8f8;
+    }
+
+    .preview-light .preview-badge.content {
+      background-color: #f8e28e;
+      color: #333;
+    }
+
+    .preview-light .preview-badge.task {
+      background-color: #5eb0ab;
+      color: #333;
+    }
+
+    .preview-light .preview-text {
+      color: #333;
+    }
+
+    /* 다크 모드 프리뷰 */
+    .preview-dark {
+      background: #121212;
+    }
+
+    .preview-dark .preview-window {
+      background-color: #1e1e1e;
+    }
+
+    .preview-dark .preview-titlebar {
+      background-color: #3a6bc5;
+    }
+
+    .preview-dark .preview-header {
+      color: #f0f0f0;
+    }
+
+    .preview-dark .preview-todo-item {
+      background-color: #2a2a2a;
+    }
+
+    .preview-dark .preview-badge.content {
+      background-color: #b08700;
+      color: #f0f0f0;
+    }
+
+    .preview-dark .preview-badge.task {
+      background-color: #2d7d78;
+      color: #f0f0f0;
+    }
+
+    .preview-dark .preview-text {
+      color: #f0f0f0;
+    }
+
+    /* 자동 모드 프리뷰 */
+    .preview-auto {
+      background: #f0f2f5;
+      display: flex;
+      flex-direction: column;
+      border: 3px solid #ddd;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .preview-auto .auto-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 5px 10px 35px 10px;
+    }
+
+    .preview-auto .preview-window {
+      display: none;
+    }
+
+    .preview-auto .system-icon-auto {
+      font-size: 24px;
+      color: #333;
+      /* material-icons와 material-symbols-outlined 스타일 재정의 */
+      font-size: 24px !important;
+      line-height: normal !important;
+      position: static !important;
+      top: auto !important;
+    }
+
+    .preview-auto .system-text {
+      font-size: 11px;
+      color: #333;
+      text-align: center;
+      font-weight: 500;
+      line-height: 1.3;
+    }
+
+    /* 다크모드에서의 자동 테마 프리뷰 */
+    .dark-mode .preview-auto {
+      background: #121212;
+      border:3px solid #444;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .dark-mode .preview-auto .system-icon-auto {
+      color: #f0f0f0;
+    }
+
+    .dark-mode .preview-auto .system-text {
+      color: #f0f0f0;
+    }
+
+    /* 테마 전환 트랜지션 */
+    .theme-transition {
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .theme-transition * {
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    /* 테마 설정 섹션 */
+    #view-settings h2 {
+      margin-top: 20px;
+      margin-bottom: 15px;
+      color: var(--text-color);
+    }
+
+    /* 그룹 컨테이너 스타일 */
+    .group-header-container {
+      margin-top: 15px;
+    }
+    .group-container {
+      margin-bottom: 15px;
+    }
+    
+    /* 설정 화면 관련 추가 CSS 스타일 */
+    .settings-card {
+      background: var(--card-background);
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px var(--shadow-color);
+    }
+    
+    .settings-card h2 {
+      font-size: 18px;
+      margin-top: 0;
+      margin-bottom: 12px;
+      color: var(--primary-color);
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 8px;
+    }
+    
+    .settings-info {
+      font-size: 13px;
+      color: var(--secondary-text);
+      margin-bottom: 12px;
+    }
+    
+    .settings-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    /* 설정 화면 버튼 공통 스타일 */
+    .settings-btn {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 16px;  /* 모든 버튼에 동일한 패딩 적용 */
+      font-size: 14px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background-color 0.2s;
+      margin-top: 0;
+      text-align: center;  /* 텍스트 중앙 정렬 */
+    }
+    
+    .settings-btn:hover {
+      background-color: var(--button-hover-bg);
+    }
+    
+    .settings-btn-secondary {
+      background-color: var(--toggle-button-bg);
+      color: var(--text-color);
+    }
+    
+    .settings-btn-danger {
+      background-color: #e53935;
+    }
+    
+    .settings-btn-danger:hover {
+      background-color: #c62828;
+    }
+    
+    .settings-input {
+      flex: 1;
+      min-width: 120px;
+      padding: 8px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 14px;
+      background-color: var(--card-background);
+      color: var(--text-color);
+    }
+    
+    .exclusion-rule {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px;
+      margin: 6px 0;
+      background-color: var(--exclusion-item-bg);
+      border: 1px solid var(--exclusion-item-border);
+      border-radius: 6px;
+    }
+    
+    .exclusion-rule-text {
+      font-size: 14px;
+    }
+    
+    .exclusion-section-select {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    
+    .exclusion-field {
+      margin-bottom: 8px;
+    }
+    
+    .settings-footer {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 10px;
+    }
+    
+    /* 디버깅 섹션 스타일 */
+    .debug-section {
+      opacity: 0.8;
+      border-top: 1px dashed var(--border-color);
+      padding-top: 15px;
+      margin-top: 20px;
+    }
+    
+    .debug-section h2 {
+      font-size: 16px;
+    }
+    
+    @media (max-width: 500px) {
+      .exclusion-section-select {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* 추가 스타일: 설정 입력 필드와 버튼 일관성 유지 */
+    .settings-form {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    
+    .settings-label {
+      width: 180px;
+      font-size: 14px;
+      color: var(--text-color);
+    }
+    
+    .settings-field {
+      flex: 1;
+      min-width: 140px; /* 최소 너비 설정 */
+    }
+    
+    .settings-save-btn {
+      text-align: center;
+    }
+    
+    /* 모바일 화면 대응 */
+    @media (max-width: 500px) {
+      .settings-form {
+        flex-wrap: wrap;
+      }
+      
+      .settings-label {
+        width: 100%;
+      }
+      
+      .settings-field {
+        flex: 1;
+      }
+      
+      .settings-save-btn {
+        margin-left: auto;
+      }
+    }
+
+    /* iOS에서 time 입력 필드 너비 개선 */
+    input[type="time"].settings-input {
+      min-width: 140px;
+      width: 100%; /* 컨테이너 너비에 맞추기 */
+      -webkit-appearance: none; /* iOS 기본 스타일 제거 */
+      padding: 8px 10px; /* 패딩 약간 늘림 */
+    }
+    
+    /* iOS에서 select 입력 필드 너비 개선 */
+    select.settings-input {
+      width: 100%;
+      min-width: 140px;
+    }
+
+    .item-text {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      min-height: 24px;  /* 최소 높이 설정 */
+      word-break: break-word;  /* 긴 텍스트 줄바꿈 */
+    }
+
+    /* 알림 상태 표시기 스타일 */
+    .notification-status {
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+      font-size: 14px;
+      color: var(--secondary-text);
+    }
+    
+    .status-indicator {
+      width: 10px;
+      height: 10px;
+      min-width: 10px;
+      min-height: 10px;
+      border-radius: 50%;
+      margin-right: 8px;
+      display: inline-block;
+      flex-shrink: 0; /* 컨테이너가 축소되어도 크기 유지 */
+      box-shadow: 0 0 2px rgba(0, 0, 0, 0.3); /* 약간의 그림자 추가 */
+    }
+    
+    .status-active {
+      background-color: #4caf50; /* 녹색 */
+    }
+    
+    .status-inactive {
+      background-color: #9e9e9e; /* 회색 */
+    }
+
+    /* 도움말 링크 스타일 */
+    .help-link {
+      color: var(--secondary-text);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      transition: color 0.2s;
+    }
+
+    .help-link:hover {
+      color: var(--primary-color);
+    }
+
+    .help-link .material-symbols-outlined {
+      font-size: 24px;
+      line-height: normal;
+      position: static;
+    }
+
+    /* 메인 화면 안내 메시지 스타일 */
+    .guide-message {
+      background-color: var(--card-background);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 16px;
+      margin: 20px 0;
+      box-shadow: 0 2px 6px var(--shadow-color);
+    }
+
+    .guide-message-title {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: var(--primary-color);
+      display: flex;
+      align-items: center;
+    }
+
+    .guide-message-title .material-icons,
+    .guide-message-title .material-symbols-outlined {
+      margin-right: 8px;
+      font-size: 20px;
+      position: static;
+      line-height: normal;
+    }
+
+    .guide-message p {
+      margin: 6px 0;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .guide-message ul {
+      margin: 8px 0;
+      padding-left: 20px;
+    }
+
+    .guide-message li {
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    .guide-button {
+      display: inline-block;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 16px;
+      margin-top: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .guide-button:hover {
+      background-color: var(--button-hover-bg);
+    }
+
+    .guide-separator {
+      border-top: 1px solid var(--border-color);
+      margin: 12px 0;
+      opacity: 0.5;
+    }
+
+    /* 링크 복사 컨테이너 스타일 */
+    .copy-link-container {
+      display: flex;
+      align-items: center;
+      background-color: var(--item-background);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 8px;
+      margin: 10px 0;
+    }
+
+    .copy-link-text {
+      flex: 1;
+      font-family: monospace;
+      color: var(--text-color);
+      margin-right: 10px;
+      user-select: all;
+      font-size: 14px;
+      padding: 4px;
+    }
+
+    .copy-link-button {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 6px 12px;
+      font-size: 14px;
+      cursor: pointer;
+      margin-top: 0;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .copy-link-button:hover {
+      background-color: var(--button-hover-bg);
+    }
+
+    .copy-link-button .material-symbols-outlined {
+      font-size: 18px;
+      position: static;
+      line-height: normal;
+    }
